@@ -1,12 +1,7 @@
 name: Package Publish
 
-# on:
-#   release:
-#     branches:
-#       - master
-
 on:
-  push:
+  release:
     branches:
       - master
 
@@ -26,11 +21,11 @@ jobs:
           FLUTTER_VERSION=${FLUTTER_VERSION//>=/}
           echo "FLUTTER_VERSION=${FLUTTER_VERSION}" >> $GITHUB_ENV
 
-      # Use extracted flutter version
+      # Use Flutter 3.x to ensure Dart 3.x is used
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
+          flutter-version: "3.5.4"  # Ensure you're using a Flutter version compatible with Dart SDK 3.x
 
       - name: Install dependencies
         run: flutter pub get
