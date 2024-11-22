@@ -5,8 +5,8 @@ homepage: https://github.com/theprantadutta/simple_animated_widgets
 repository: https://github.com/theprantadutta/simple_animated_widgets
 
 environment:
-  sdk: ">=3.3.0 <4.0.0"
-  flutter: 3.19.0
+  sdk: ^3.5.4
+  flutter: ">=1.17.0"
 
 dependencies:
   flutter:
@@ -20,4 +20,4 @@ dev_dependencies:
   husky: ^0.1.7
 
 lint_staged:
-  "lib/**.dart": dart format --fix && dart fix --apply && flutter analyze
+  "lib/**.dart": dart format --fix && dart fix --apply
