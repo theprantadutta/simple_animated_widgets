@@ -1,7 +1,5 @@
 library simple_animated_widgets;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'src/bouncing_text.dart';
+export 'src/fading_button.dart';
+export 'src/rotating_icon.dart';
