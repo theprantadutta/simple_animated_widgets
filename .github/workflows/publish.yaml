@@ -2,26 +2,39 @@ on:
   release:
     branches:
       - master
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install Flutter
-        uses: subosito/flutter-action@v2
+
+      - name: Set up Dart
+        uses: dart-lang/setup-dart@v1
         with:
-          channel: stable
-          flutter-version-file: pubspec.yaml
+          sdk: stable  # This sets up the stable Dart SDK
+
+      - name: Install Flutter
+        run: |
+          git clone https://github.com/flutter/flutter.git /flutter
+          export PATH="$PATH:/flutter/bin"
+          flutter doctor
+
       - name: Install dependencies
         run: flutter pub get
+
       - name: Analyze
         run: flutter analyze
+
+      - name: Format code
+        run: dart format --fix . && dart fix --apply
+
       - name: Run tests
         run: flutter test
-      - name: Format code
-        run: dart format --fix .
+
       - name: Check Publish Warnings
         run: dart pub publish --dry-run
+
       - name: Publish
         uses: k-paxian/dart-package-publisher@v1.5.1
         with:
