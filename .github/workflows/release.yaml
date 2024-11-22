@@ -1,7 +1,7 @@
 name: Package Publish
 
 on:
-  release:
+  push:
     branches:
       - master
 
