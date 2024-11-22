@@ -2,80 +2,51 @@ name: Package Publish
 
 # on:
 #   release:
-#     branches: [ master ]
+#     branches:
+#       - master
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
 
-jobs: 
-  check_version: 
-    name: "Check Version Tag"
-    runs-on: ubuntu-20.04
-    steps: 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v2
-      - continue-on-error: true
-        env: 
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-        id: previoustag
-        name: "Get Latest Version"
-        uses: WyriHaximus/github-action-get-previous-tag@v1
-      - name: "Print Latest Version"
-        run: "echo ${{ steps.previoustag.outputs.tag }}"
-      - id: config
-        name: "Get New Version"
-        uses: CumulusDS/get-yaml-paths-action@v0.2.0
-        with: 
-          file: pubspec.yaml
-          version_name: version
-      - name: "Print New Version"
-        run: "echo ${{ steps.config.outputs.version_name }}"
-      - if: "steps.config.outputs.version_name == steps.previoustag.outputs.tag"
-        name: "Compare Version"
+
+      # Step to extract flutter version from pubspec.yaml
+      - name: Extract Flutter version from pubspec.yaml
+        id: flutter_version
         run: |
-            echo 'The version from your pubspec.yaml is the same as Release, Please update the version'
-            exit 1
-      - run: "echo ${{ steps.config.outputs.version_name }} > version.txt"
-        shell: bash
-      - name: "Upload New Version"
-        uses: actions/upload-artifact@v2
-        with: 
-          name: home
-          path: version.txt
+          FLUTTER_VERSION=$(grep flutter: pubspec.yaml | head -n 1 | awk '{print $2}' | tr -d '"')
+          echo "FLUTTER_VERSION=${FLUTTER_VERSION}" >> $GITHUB_ENV
 
-  publish: 
-    needs: 
-      - check_version
-    runs-on: ubuntu-20.04
-    steps: 
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: "Install Dependencies"
+      # Use extracted flutter version
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+
+      - name: Install dependencies
         run: flutter pub get
-      - name: "Publish Package"
-        uses: ilteoood/actions-flutter-pub-publisher@master
-        with: 
-          credential: "${{secrets.CREDENTIAL_JSON}}"
-          dry_run: false
-          flutter_package: true
-          skip_test: true
 
-  tag: 
-    name: "Tag Version"
-    needs: 
-      - publish
-    runs-on: ubuntu-20.04
-    steps: 
-      - name: "Download New Version"
-        uses: actions/download-artifact@v2
-        with: 
-          name: home
-      - env: 
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
-        name: "Set and Tag the new version"
-        run: "echo \"::set-env name=RELEASE_VERSION::$(cat home/version.txt)\""
-        shell: bash
-      - uses: tvdias/github-tagger@v0.0.2
-        with: 
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          tag: "${{env.RELEASE_VERSION}}"
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Format code
+        run: dart format --fix .
+
+      - name: Check Publish Warnings
+        run: dart pub publish --dry-run
+
+      - name: Publish
+        uses: k-paxian/dart-package-publisher@v1.5.1
+        with:
+          credentialJson: ${{ secrets.CREDENTIAL_JSON }}
+          flutter: true
+          skipTests: true
