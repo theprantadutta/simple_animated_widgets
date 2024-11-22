@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text('Simple Animated Widgets'),
+          title: const Text('Simple Animated Widgets'),
         ),
         body: Center(
           child: Column(
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               BouncingText(
                 text: "I Will Bounce on Tap!",
                 style: const TextStyle(
@@ -58,15 +58,15 @@ class MyApp extends StatelessWidget {
                 scaleFactor: 1.5,
                 duration: const Duration(milliseconds: 300),
               ),
-              SizedBox(height: 10),
-              RotatingIcon(
+              const SizedBox(height: 10),
+              const RotatingIcon(
                 isRotating: false,
-                icon: const Icon(
+                icon: Icon(
                   Icons.refresh,
                   size: 48,
                   color: Colors.blue,
                 ),
-                duration: const Duration(seconds: 2),
+                duration: Duration(seconds: 2),
                 angle: 360.0,
               ),
             ],

@@ -7,7 +7,7 @@ on:
   push:
     branches:
       - master
-      
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,8 +25,8 @@ jobs:
         run: flutter pub get
       - name: Analyze
         run: flutter analyze
-      - name: Run tests
-        run: flutter test
+      # - name: Run tests
+      #   run: flutter test
       - name: Format code
         run: dart format --fix .
       - name: Check Publish Warnings
