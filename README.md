@@ -1,7 +1,3 @@
-Here’s a README template for your `simple_animated_widgets` package, based on the three components we've created so far (`FadingButton`, `BouncingText`, and `RotatingIcon`). Feel free to adjust any specific information or add further details as needed:
-
----
-
 # simple_animated_widgets
 
 **simple_animated_widgets** is a Flutter package that provides simple, reusable, and customizable animated widgets to enhance your Flutter applications. Whether you're looking to add smooth transitions, visual effects, or interactions to your UI components, this package offers a set of easy-to-use widgets for your needs.
