@@ -1,5 +1,10 @@
+# on:
+#   release:
+#     branches:
+#       - master
+
 on:
-  release:
+  push:
     branches:
       - master
 
