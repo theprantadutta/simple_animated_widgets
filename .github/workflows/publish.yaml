@@ -1,7 +1,13 @@
+# on:
+#   release:
+#     branches:
+#       - master
+
 on:
-  release:
+  push:
     branches:
       - master
+      
 jobs:
   build:
     runs-on: ubuntu-latest
