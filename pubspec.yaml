@@ -6,7 +6,7 @@ repository: https://github.com/theprantadutta/simple_animated_widgets
 
 environment:
   sdk: ^3.5.4
-  flutter: ">=1.17.0"
+  flutter: 3.24.5
 
 dependencies:
   flutter:
