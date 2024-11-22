@@ -1,8 +1,12 @@
 name: Package Publish
 
+# on:
+#   release:
+#     branches: [ master ]
+
 on:
   push:
-    branches: [ release ]
+    branches: [ master ]
 
 jobs: 
   check_version: 
