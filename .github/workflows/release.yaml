@@ -20,7 +20,10 @@ jobs:
       - name: Extract Flutter version from pubspec.yaml
         id: flutter_version
         run: |
-          FLUTTER_VERSION=$(grep flutter: pubspec.yaml | head -n 1 | awk '{print $2}' | tr -d '"')
+          # Extract the version number without the '>='
+          FLUTTER_VERSION=$(grep 'flutter:' pubspec.yaml | head -n 1 | awk '{print $2}' | tr -d '"')
+          # Remove the '>=', e.g., '>=1.17.0' becomes '1.17.0'
+          FLUTTER_VERSION=${FLUTTER_VERSION//>=/}
           echo "FLUTTER_VERSION=${FLUTTER_VERSION}" >> $GITHUB_ENV
 
       # Use extracted flutter version
