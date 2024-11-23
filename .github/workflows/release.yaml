@@ -11,22 +11,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Step to extract flutter version from pubspec.yaml
-      - name: Extract Flutter version from pubspec.yaml
-        id: flutter_version
-        run: |
-          # Extract the version number without the '>='
-          FLUTTER_VERSION=$(grep 'flutter:' pubspec.yaml | head -n 1 | awk '{print $2}' | tr -d '"')
-          # Remove the '>=', e.g., '>=1.17.0' becomes '1.17.0'
-          FLUTTER_VERSION=${FLUTTER_VERSION//>=/}
-          echo "FLUTTER_VERSION=${FLUTTER_VERSION}" >> $GITHUB_ENV
-
-      # Use Flutter 3.x to ensure Dart 3.x is used
-      - name: Install Flutter
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.5.4"  # Ensure you're using a Flutter version compatible with Dart SDK 3.x
-
+          channel: stable
+      - run: flutter --version
+      
       - name: Install dependencies
         run: flutter pub get
 
